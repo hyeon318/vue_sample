@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <app-header v-bind:'props 속성 이름="상위 컴포넌트 데이터"'></app-header> -->
+        <app-header v-bind:title="str"></app-header>
+        <!-- <app-contents v-on:하위 컴포넌트에서 발생한 이름='상위 컴포넌트의 메소드 이름'></app-contents> -->
+        <app-contents v-on:change='changeStr'></app-contents>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        new Vue({
+            // instance 옵션
+            el: ' #app',
+            data: {
+                str: 'props string'
+            },
+            methods: {
+                changeStr: function () {
+                    this.str = '변경되었습니다.'
+                }
+            },
+
+            components: { // '컴포넌트 이름' : '컴포넌트 내용' , 'app-header' : {
+                // app-header 컴포넌트 내용
+                'app-header': {
+                    props: ['title'],
+                    template: '<h1>{{title}}</h1>'
+                },
+                'app-contents': {
+                    template: '<main>컨텐츠<button v-on:click="change">메시지 변경</button></main>',
+                    methods: {
+                        change() {
+                            this.$emit('change')
+                            // 상위 부분에서 change라는 메소드로 입력 받을 수 있게 된다.
+                            // 이벤트 위치를 root 로 이동시킴
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
